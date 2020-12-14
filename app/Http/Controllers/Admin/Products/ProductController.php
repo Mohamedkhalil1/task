@@ -111,7 +111,12 @@ class ProductController extends Controller
             //dd($option_values);
             for($i=0 ; $i< count($options) ;$i++){
                array_push($option_key,$options[$i]['option']);
-               $attr = Attribute::where('name',$options[$i]['option'])->first();
+               $attr = Attribute::where('name',strtolower($options[$i]['option']))->first();
+               if($attr === null){
+                   $attr = Attribute::create([
+                    'name' => $options[$i]['option']
+                   ]);
+               }
                 Option::create([
                     'product_id' => $product->id,
                     'attribute_id' => $attr->id,
