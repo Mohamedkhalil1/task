@@ -138,18 +138,24 @@ class ProductController extends Controller
 
             ## Step 2
             ## get all variant to make action on them (delete , update price and quantity)
-            $items = inventory::where('product_id',$product->id)->get();
-            $product_id = $product->id;
-            return view('admin.products.variant',compact('items','product_id'));
-        
          
-            return redirect()->route('admin.products')->with(['success' => 'Product '.$this->added_msg]);
+            return redirect()->route('admin.products.show.variants',$product->id)->with(['success' => 'Product '.$this->added_msg]);
         }catch(\Exception $ex){
             DB::rollback();
             return redirect()->back()->with(['error' => $this->error_msg]);
         }
      
     }
+
+    public function showVariants($product_id){
+        try{
+            $items = inventory::where('product_id',$product_id)->get();
+            return view('admin.products.variant',compact('items','product_id'));
+        }catch(\Exception $ex){
+            return redirect()->back()->with(['error' => $this->error_msg]);
+        }
+    }
+
 
     // save images into folder only 
     public function saveProductImage(Request $request){
@@ -233,10 +239,17 @@ class ProductController extends Controller
     public function remove_variant($product_id , $variant_id){
 
         try{
-            inventory::findOrFail($variant_id)->delete();
-            $items = inventory::where('product_id',$product_id)->get();
-            return view('admin.products.variant',compact('items','product_id'));
+            $varient = inventory::findOrFail($variant_id);
+            
+            if((int)$varient->price !== 0){
+                $varient->delete();
+                return redirect()->route('admin.products')->with(['success' => 'Product '.$this->deleted_msg]);
+            }
+            $varient->delete();
+            return redirect()->route('admin.products.show.variants',$product_id)->with(['success' => 'Variant '.$this->deleted_msg]);
+            //return view('admin.products.variant',compact('items','product_id'));
         }catch(\Exception $ex){
+            dd($ex);
             return redirect()->route('admin.products')->with(['error' => $this->error_msg]);
         }
         

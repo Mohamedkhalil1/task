@@ -132,9 +132,8 @@
                             update
                         </button>
 
-                        <button type="button" class="btn btn-warning mr-1 float-right"
-                        onclick="history.back();">
-                            back
+                        <button type="button" class="btn btn-danger">
+                            <a style="color:white" href="{{route('admin.products.variant.remove',[$variant->product->id,$variant->id])}}">Remove Variant</a>
                         </button>
                     </div>
 
@@ -190,7 +189,7 @@
                   <!-- Variant Section -->
                   <div class="card">
                     <div class="card-header">
-                      <h4 class="card-title">Variant</h4>
+                      <h4 class="card-title">Variants</h4>
                     </div>
                     
                       <div class="card-body ">
@@ -215,14 +214,15 @@
                     </div>
                   </div>
                   <!--/ Variant Section -->
-                  
-                  
                 </div>
               </div>
             </div>
-          </div>
 
-        
+            
+
+          </div>
+          
+          
     </div>
 
 @endsection

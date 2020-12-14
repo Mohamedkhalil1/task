@@ -45,7 +45,8 @@ Route::group(
                 Route::post('/','ProductController@store')->name('admin.products.store');
                 Route::put('/{variant_id}','ProductController@variant_update')->name('admin.products.variant.update');
                 Route::get('/edit/{id}','ProductController@edit')->name('admin.products.edit');
-                Route::post('variant','ProductController@variant')->name('admin.products.variant');
+                Route::get('variant','ProductController@store_variant')->name('admin.products.store.variant');
+                Route::get('variant/show/{product_id}','ProductController@showVariants')->name('admin.products.show.variants');
                 Route::post('store/variant','ProductController@store_variant')->name('admin.products.store.variant');
                 Route::get('remove/variant/{product_id}/{variant_id}','ProductController@remove_variant')->name('admin.products.variant.remove');
                 
