@@ -20,6 +20,7 @@
         "maatwebsite/excel": "^3.1",
         "mcamara/laravel-localization": "^1.5",
         "phpoffice/phpspreadsheet": "^1.15",
+        "spatie/laravel-fractal": "^5.8",
         "yajra/laravel-datatables-oracle": "~9.0"
     },
     "require-dev": {

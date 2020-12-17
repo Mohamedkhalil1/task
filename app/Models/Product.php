@@ -9,6 +9,10 @@ class Product extends Model
 {
     protected $guarded = [];
 
+    protected $hidden = [
+        'created_at','image','updated_at'
+    ];
+
     public $transformer = ProductTransformer::class;
 
     
@@ -22,6 +26,10 @@ class Product extends Model
 
     public function inventories(){
         return $this->hasMany(inventory::class,'product_id');
+    }
+
+    public function attributes(){
+        return $this->belongsToMany(Attribute::class,'options','product_id','attribute_id');
     }
 
 }

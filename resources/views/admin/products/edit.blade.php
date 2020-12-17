@@ -33,7 +33,7 @@
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label for="projectinput1">{{ucfirst($option->attribute->name)}}</label>
-                                                <input type="text" value="{{explode('/',$variant->value)[$index]}}" 
+                                                <input type="text" value="{{$variant->array_values[$index]}}" 
                                                         class="form-control"
                                                         placeholder=""
                                                         name="options[]">

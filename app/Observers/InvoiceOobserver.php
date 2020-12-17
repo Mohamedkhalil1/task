@@ -15,6 +15,9 @@ class InvoiceOobserver
      */
     public function deleted(Invoice $invoice)
     {
+
+      // options => attri 
+      // inventory 
       $invoices = InvoiceProduct::where('invoice_id',$invoice->id)->get();
       foreach($invoices as $invoice){
           $invoice->delete();

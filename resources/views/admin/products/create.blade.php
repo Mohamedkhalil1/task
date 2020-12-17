@@ -134,7 +134,7 @@
                                             <div data-repeater-list="repeater_group">
                                               <div class="input-group mb-1" data-repeater-item="">
                                                 <input type="type" placeholder="Option Title" class="form-control" name="option" id="example-tel-input">
-                                                <input type="type" placeholder="Option Value" class="form-control ml-2 mr-1" name="option_value" id="example-tel-input">
+                                                <input type="type" placeholder="Separate options with a comma" class="form-control ml-2 mr-1" name="option_value" id="example-tel-input">
                                                 <span class="input-group-append" id="button-addon2">
                                                   <button class="btn btn-danger" type="button" data-repeater-delete=""><i class="ft-x"></i></button>
                                                 </span>
