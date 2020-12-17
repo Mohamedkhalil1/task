@@ -260,6 +260,8 @@ class ProductController extends Controller
     public function variant_update(Request $request , $id){
         try{
            
+            DB::beginTransaction();
+            $variant = inventory::findOrFail($id);
             $params = $request->only('price','quantity');
             $params['value']='';
             $array_values = array();
@@ -270,10 +272,63 @@ class ProductController extends Controller
             $params['array_values']=$array_values;
             $params['value']=ltrim($params['value'],'/');
             
-            inventory::findOrFail($id)->update($params);
+
+            foreach($array_values as $index => $value){
+               
+                if($value !== $variant->array_values[$index]){
+
+                    $old_attr_value = Attribute_value::where('value',$variant->array_values[$index])
+                        ->where('attribute_id',$variant->product->options[$index]->attribute_id)->first();
+
+                    $old_attr_value->update([
+                        'count' => $old_attr_value->count-1
+                    ]);
+                    
+                    $attr_value = Attribute_value::where('value',$value)
+                    ->where('attribute_id',$variant->product->options[$index]->attribute_id)->first();
+                    if($attr_value === null){
+                        Attribute_value::create([
+                            'value' => $value,
+                            'count' => 1,
+                            'attribute_id' => $variant->product->options[$index]->attribute_id
+                        ]);
+                    }else{
+                        $attr_value->update([
+                            'count' =>  $attr_value->count+1
+                        ]);
+                    }
+
+
+                    $old_attr_value = ProductAttributeValue::where('value',$variant->array_values[$index])
+                        ->where('attribute_id',$variant->product->options[$index]->attribute_id)
+                        ->where('product_id',$variant->product->id)->first();
+
+                    $old_attr_value->update([
+                        'count' => $old_attr_value->count-1
+                    ]);
+                    
+                    $attr_value = ProductAttributeValue::where('value',$value)
+                    ->where('attribute_id',$variant->product->options[$index]->attribute_id)->first();
+                    if($attr_value === null){
+                        ProductAttributeValue::create([
+                            'value' => $value,
+                            'count' => 1,
+                            'attribute_id' => $variant->product->options[$index]->attribute_id,
+                            'product_id' => $variant->product->id
+                        ]);
+                    }else{
+                        $attr_value->update([
+                            'count' =>  $attr_value->count+1
+                        ]);
+                    }
+                }
+            }
+
+            $variant->update($params);
+            DB::commit();
             return redirect()->back()->with(['success' =>'Variant '.$this->updated_msg]);
         }catch(\Exception $ex){
-           
+           DB::rollback();
             return redirect()->back()->with(['error' => $this->error_msg]);
         }  
     }
